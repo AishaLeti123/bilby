@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilby (2018) — Официальный фан-сайт</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ===== БЕГАЮЩИЙ ПТЕНЕЦ АЛЬБАТРОСА ===== -->
+
+<!-- HTML птенца и контейнера для салюта -->
+<div id="running-chick" class="running-chick">
+    <img src="chick.png" alt="Птенец альбатроса" class="chick-image">
+</div>
+<div id="fireworks-container"></div>
+
+<!-- Стили птенца и салюта -->
+<style>
+    .running-chick {
+        position: fixed;
+        width: 120px;
+        height: 120px;
+        cursor: pointer;
+        z-index: 9999;
+        user-select: none;
+        pointer-events: auto;
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+        transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .chick-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        animation: chickBounce 0.4s ease-in-out infinite;
+    }
+
+    .running-chick:hover {
+        transform: scale(1.25);
+        filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+    }
+
+    .running-chick:hover .chick-image {
+        animation-play-state: paused;
+    }
+
+    .running-chick:active {
+        transform: scale(0.85);
+    }
+
+    @keyframes chickBounce {
+        0%, 100% { transform: translateY(0) rotate(-3deg); }
+        50% { transform: translateY(-8px) rotate(3deg); }
+    }
+
+    .firework-particle {
+        position: fixed;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        animation: fireworkExplode 1.2s ease-out forwards;
+    }
+
+    @keyframes fireworkExplode {
+        0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(var(--tx), var(--ty)) scale(0);
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .running-chick {
+            width: 80px;
+            height: 80px;
+        }
+    }
+</style>
+
+<!-- JavaScript: движение, исчезновение, салют, возрождение -->
+<script>
+    const chick = document.getElementById('running-chick');
+    const fireworksContainer = document.getElementById('fireworks-container');
+    let isCaught = false;
+    let moveInterval;
+
+    function moveChickRandomly() {
+        if (isCaught) return;
+        
+        const maxX = window.innerWidth - 120;
+        const maxY = window.innerHeight - 120;
+        
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+        
+        chick.style.left = randomX + 'px';
+        chick.style.top = randomY + 'px';
+    }
+
+    // Запускаем движение каждые 2 секунды
+    moveInterval = setInterval(moveChickRandomly, 2000);
+    moveChickRandomly(); // сразу ставим в случайное место
+
+    // Клик по птенцу
+    chick.addEventListener('click', function(e) {
+        if (isCaught) return;
+        e.preventDefault();
+        isCaught = true;
+        
+        // Останавливаем движение
+        clearInterval(moveInterval);
+        
+        // Птенец исчезает: уменьшается и вращается
+        chick.style.transition = 'transform 0.4s, opacity 0.4s';
+        chick.style.transform = 'scale(0) rotate(360deg)';
+        chick.style.opacity = '0';
+        
+        // Создаём салют в месте клика
+        createMegaFirework(e.clientX, e.clientY);
+        
+        // Через 4 секунды птенец возрождается
+        setTimeout(() => {
+            respawnChick();
+        }, 4000);
+    });
+
+    function respawnChick() {
+        // Сбрасываем стили
+        chick.style.transition = 'none';
+        chick.style.transform = 'scale(0)';
+        chick.style.opacity = '1';
+        
+        // Новое случайное место
+        const maxX = window.innerWidth - 120;
+        const maxY = window.innerHeight - 120;
+        chick.style.left = (Math.random() * maxX) + 'px';
+        chick.style.top = (Math.random() * maxY) + 'px';
+        
+        // Плавное появление
+        requestAnimationFrame(() => {
+            chick.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            chick.style.transform = 'scale(1)';
+        });
+        
+        // Через секунду снова начинает бегать
+        setTimeout(() => {
+            isCaught = false;
+            moveInterval = setInterval(moveChickRandomly, 2000);
+        }, 1000);
+    }
+
+    function createMegaFirework(x, y) {
+        const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4ecdc4', '#ff8c42', '#a8e6cf', '#c14e2a', '#ff4757', '#ffa502'];
+        const particleCount = 40;
+        
+        // Две волны салюта
+        for (let wave = 0; wave < 2; wave++) {
+            setTimeout(() => {
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'firework-particle';
+                    
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.backgroundColor = color;
+                    
+                    const size = 6 + Math.random() * 8;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    
+                    const angle = (Math.PI * 2 * i) / particleCount + (wave * 0.5);
+                    const velocity = 80 + Math.random() * 150;
+                    const tx = Math.cos(angle) * velocity;
+                    const ty = Math.sin(angle) * velocity;
+                    
+                    particle.style.setProperty('--tx', tx + 'px');
+                    particle.style.setProperty('--ty', ty + 'px');
+                    
+                    fireworksContainer.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 1200);
+                }
+            }, wave * 200);
+        }
+        
+        // Белые искры
+        for (let i = 0; i < 20; i++) {
+            const spark = document.createElement('div');
+            spark.className = 'firework-particle';
+            spark.style.backgroundColor = '#fff';
+            spark.style.width = '4px';
+            spark.style.height = '4px';
+            spark.style.left = x + 'px';
+            spark.style.top = y + 'px';
+            spark.style.boxShadow = '0 0 10px #fff, 0 0 20px #ffd93d';
+            
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 50 + Math.random() * 200;
+            spark.style.setProperty('--tx', (Math.cos(angle) * velocity) + 'px');
+            spark.style.setProperty('--ty', (Math.sin(angle) * velocity) + 'px');
+            
+            fireworksContainer.appendChild(spark);
+            
+            setTimeout(() => spark.remove(), 1000);
+        }
+    }
+</script>
+<!-- ===== КОНЕЦ КОДА ПТЕНЦА ===== -->  
+    <!-- Бегущая строка с автором -->
+<div class="author-banner">
+    <div class="author-banner-content">
+        <span class="author-label">АВТОР САЙТА:</span>
+        <span class="author-name">Летифова Айшат</span>
+    </div>
+</div>
+
+    <!-- Динамический фон -->
+    <div class="background-layer"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="logo">🐾 BILBY</div>
+        <ul class="menu">
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#story">История</a></li>
+            <li><a href="#characters">Персонажи</a></li>
+            <li><a href="#meaning">Смысл</a></li>
+            <li><a href="#gallery">Галерея</a></li>
+            <li><a href="#facts">Факты</a></li>
+            <li><a href="#watch">Смотреть</a></li>
+        </ul>
+        <div class="burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+    
+</div>
+
+    <!-- ГЛАВНАЯ -->
+    <section id="home" data-color="#c14e2a">
+        <div class="container hero-content">
+            <div class="hero-badge">DreamWorks Animation • 2018</div>
+            <h1>BILBY</h1>
+            <p class="tagline">История о том, как одиночка стал героем</p>
+            <p class="description">
+                Трогательная короткометражная анимация о маленьком сумчатом бильби, 
+                который невольно становится защитником беспомощного птенца альбатроса 
+                в суровой австралийской пустыне.
+            </p>
+            <div class="hero-buttons">
+                <a href="#watch" class="btn btn-primary">▶ Смотреть мультфильм</a>
+                <a href="#story" class="btn btn-secondary">Узнать историю</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Листай вниз</span>
+            <div class="arrow"></div>
+        </div>
+    </section>
+
+    <!-- ИСТОРИЯ -->
+    <section id="story" data-color="#d4a373">
+        <div class="container">
+            <h2 class="section-title">Сюжет мультфильма</h2>
+            <div class="story-grid">
+                <div class="story-card">
+                    <div class="card-number">01</div>
+                    <h3>Одинокий выживальщик</h3>
+                    <p>Бильби — маленькое сумчатое животное из австралийской пустыни. Он одинок, голоден и постоянно убегает от хищников: змей, динго, скорпионов. Его единственная цель — найти еду и выжить ещё один день.</p>
+                </div>
+                <div class="story-card">
+                    <div class="card-number">02</div>
+                    <h3>Нежданная встреча</h3>
+                    <p>Однажды бильби находит маленького белого птенца альбатроса, который выпал из гнезда. Сначала он пытается избавиться от него — птенец только мешает и привлекает хищников.</p>
+                </div>
+                <div class="story-card">
+                    <div class="card-number">03</div>
+                    <h3>Невольный защитник</h3>
+                    <p>Но постепенно между ними возникает связь. Бильби начинает защищать птенца от всех опасностей пустыни — змей, лис, скорпионов, падающих кактусов и даже огненных бурь.</p>
+                </div>
+                <div class="story-card">
+                    <div class="card-number">04</div>
+                    <h3>Горькое прощание</h3>
+                    <p>Достигнув океана, бильби понимает: птенец должен улететь к своей семье. В самом трогательном моменте он отпускает того, кого полюбил. Но судьба готовит неожиданную встречу...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПЕРСОНАЖИ -->
+    <section id="characters" data-color="#4a90a4">
+        <div class="container">
+            <h2 class="section-title">Персонажи</h2>
+            <div class="characters-grid">
+                <!-- Бильби -->
+                <div class="character-card">
+                    <div class="character-visual bilby-visual">
+                        <!-- ЗАМЕНИТЕ src НА ВАШУ КАРТИНКУ БИЛЬБИ -->
+                        <img src="i (2).webp" alt="Бильби" class="custom-icon">
+                    </div>
+                    <h3>Бильби</h3>
+                    <span class="species">Сумчатый бильби (Macrotis lagotis)</span>
+                    <p>Главный герой — маленький, испуганный, но с большим сердцем. Синяя шерсть, огромные уши и красный нос. Он не планировал быть героем, но стал им.</p>
+                    <div class="traits">
+                        <span>🏃 Быстрый</span>
+                        <span>❤️ Добрый</span>
+                        <span>😨 Пугливый</span>
+                    </div>
+                </div>
+
+                <!-- Птенец -->
+                <div class="character-card">
+                    <div class="character-visual chick-visual">
+                         <!-- ЗАМЕНИТЕ src НА ВАШУ КАРТИНКУ ПТЕНЦА -->
+                        <img src="i.webp" alt="Птенец" class="custom-icon">
+                    </div>
+                    <h3>Птенец альбатроса</h3>
+                    <span class="species">Baby Albatross</span>
+                    <p>Маленький белый пушистый комочек с огромными глазами. Выпал из гнезда и не может летать. Несмотря на беспомощность, именно он меняет жизнь бильби.</p>
+                    <div class="traits">
+                        <span>👶 Малыш</span>
+                        <span>🤍 Чистый</span>
+                        <span>🪽 Будущий летун</span>
+                    </div>
+                </div>
+
+                <!-- Змея -->
+                <div class="character-card">
+                    <div class="character-visual snake-visual">
+                         <!-- ЗАМЕНИТЕ src НА ВАШУ КАРТИНКУ ЗМЕИ -->
+                        <img src="2026-11-12_11-13.png" alt="Змея" class="custom-icon">
+                    </div>
+                    <h3>Змея</h3>
+                    <span class="species">Австралийская змея</span>
+                    <p>Главный антагонист пустыни. Преследует бильби на протяжении всего мультфильма. Символ постоянной опасности дикой природы.</p>
+                    <div class="traits">
+                        <span>⚡ Быстрая</span>
+                        <span>😈 Хитрая</span>
+                        <span>🎯 Настойчивая</span>
+                    </div>
+                </div>
+
+                <!-- Взрослый альбатрос -->
+                <div class="character-card">
+                    <div class="character-visual adult-visual">
+                         <!-- ЗАМЕНИТЕ src НА ВАШУ КАРТИНКУ АЛЬБАТРОСА -->
+                        <img src="2026-11-12_11-16.png" alt="Альбатрос" class="custom-icon">
+                    </div>
+                    <h3>Взрослый альбатрос</h3>
+                    <span class="species">Странствующий альбатрос</span>
+                    <p>В финале мультфильма птенец вырастает и возвращается за своим другом. Символ надежды и того, что настоящая дружба не знает расстояний.</p>
+                    <div class="traits">
+                        <span>🌊 Свободный</span>
+                        <span>💙 Верный</span>
+                        <span>✨ Выросший</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СМЫСЛ -->
+    <section id="meaning" data-color="#6b705c">
+        <div class="container">
+            <h2 class="section-title">Как понимать мультфильм</h2>
+            
+            <div class="meaning-quote">
+                <p class="quote-text">"Иногда мы находим семью там, где совсем не ищем"</p>
+                <p class="quote-author">— главная идея Bilby</p>
+            </div>
+
+            <div class="meanings-list">
+                <div class="meaning-item">
+                    <div class="meaning-icon">
+                        <!-- ЗАМЕНИТЕ src НА ИКОНКУ ОДИНОЧЕСТВА -->
+                        <img src="i_39.webp" alt="Одиночество" class="custom-icon-small">
+                    </div>
+                    <h3>Одиночество и связь</h3>
+                    <p>Бильби живёт в суровой пустыне и привык быть один. Птенец ломает его защиту и показывает, что даже самому независимому существу нужна связь с другим.</p>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">
+                         <!-- ЗАМЕНИТЕ src НА ИКОНКУ ЛЮБВИ -->
+                        <img src="9e8e1687b7ad6ea8d433758d3ff587b3.jpg" alt="Любовь" class="custom-icon-small">
+                    </div>
+                    <h3>Любовь — это отпустить</h3>
+                    <p>Самый сильный момент мультфильма — когда бильби отпускает птенца в небо. Настоящая любовь не держит, а даёт свободу. Это метафора родительской любви и дружбы.</p>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">
+                         <!-- ЗАМЕНИТЕ src НА ИКОНКУ ГЕРОИЗМА -->
+                        <img src="f78fa7246eb0446147f91e5efc0ae64b.png" alt="Героизм" class="custom-icon-small">
+                    </div>
+                    <h3>Герой поневоле</h3>
+                    <p>Бильби не выбирал быть героем. Он просто делал то, что считал правильным, снова и снова. Мультфильм говорит: героизм — это не отсутствие страха, а действие вопреки ему.</p>
+                </div>
+                <div class="meaning-item">
+                    <div class="meaning-icon">
+                         <!-- ЗАМЕНИТЕ src НА ИКОНКУ КРУГА ЖИЗНИ -->
+                        <img src="6beecde2904f284de14ddc99f9b5a661.jpg" alt="Круг жизни" class="custom-icon-small">
+                    </div>
+                    <h3>Круг жизни</h3>
+                    <p>Финал показывает: добро возвращается. Альбатрос вырос и прилетел обратно. Природа циклична, и забота о другом никогда не бывает напрасной.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГАЛЕРЕЯ -->
+    <section id="gallery" data-color="#a8dadc">
+        <div class="container">
+            <h2 class="section-title">Ключевые сцены</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #e76f51, #f4a261);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ПУСТЫНИ -->
+                        <img src="6bbfe359190939.5a188e484a608.webp" alt="Пустыня" class="custom-icon-large">
+                        <p>Пустыня Аутбэк</p>
+                    </div>
+                    <p class="gallery-caption">Суровый мир, где начинается история</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #2a9d8f, #264653);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ВСТРЕЧИ -->
+                        <img src="i (3).webp" alt="Встреча" class="custom-icon-large">
+                        <p>Первая встреча</p>
+                    </div>
+                    <p class="gallery-caption">Момент, изменивший всё</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #e9c46a, #f4a261);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ПУТИ -->
+                        <img src="i (4).webp" alt="Путь" class="custom-icon-large">
+                        <p>Путь к океану</p>
+                    </div>
+                    <p class="gallery-caption">Долгое путешествие домой</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #6d597a, #b56576);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ПРОЩАНИЯ -->
+                        <img src="1823093.jpg" alt="Прощание" class="custom-icon-large">
+                        <p>Прощание</p>
+                    </div>
+                    <p class="gallery-caption">Самый трогательный момент</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #457b9d, #1d3557);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ВОССОЕДИНЕНИЯ -->
+                        <img src="2026-11-12_11-29.png" alt="Воссоединение" class="custom-icon-large">
+                        <p>Воссоединение</p>
+                    </div>
+                    <p class="gallery-caption">Финал, который трогает до слёз</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder" style="background: linear-gradient(135deg, #ff9f1c, #ffbf69);">
+                         <!-- ЗАМЕНИТЕ src НА СКРИНШОТ ЗАКАТА -->
+                        <img src="2026-11-12_11-29_1.png" alt="Закат" class="custom-icon-large">
+                        <p>Закат дружбы</p>
+                    </div>
+                    <p class="gallery-caption">Два друга смотрят на закат</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ФАКТЫ -->
+    <section id="facts" data-color="#264653">
+        <div class="container">
+            <h2 class="section-title">Интересные факты</h2>
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <div class="fact-number">1</div>
+                    <h3>Без слов</h3>
+                    <p>В мультфильме нет ни одного слова диалога. Вся история рассказана через анимацию, музыку и эмоции персонажей.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-number">2</div>
+                    <h3>Реальное животное</h3>
+                    <p>Бильби (Macrotis lagotis) — реально существующее сумчатое из Австралии, находящееся под угрозой исчезновения.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-number">3</div>
+                    <h3>8 минут</h3>
+                    <p>Хронометраж мультфильма — всего 8 минут, но за это время рассказывается целая жизнь.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-number">4</div>
+                    <h3>Три режиссёра</h3>
+                    <p>Фильм сняли Liron Topaz, Pierre Perifel и JP Sans — команда DreamWorks Animation.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-number">5</div>
+                    <h3>Показан перед "Как приручить дракона 3"</h3>
+                    <p>Мультфильм демонстрировался в кинотеатрах перед полнометражным фильмом в 2019 году.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-number">6</div>
+                    <h3>Музыка</h3>
+                    <p>Саундтрек написал Benjamin Wallfisch — известный композитор ("Дюна", "Оно").</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- СМОТРЕТЬ ОНЛАЙН -->
+<section id="watch" data-color="#1a1a2e">
+    <div class="container">
+        <h2 class="section-title">Смотреть онлайн</h2>
+
+        <!-- Информация о фильме -->
+        <div class="watch-info">
+            <div class="movie-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Год</span>
+                    <span class="meta-value">2018</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Страна</span>
+                    <span class="meta-value">США 🇺🇸</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Студия</span>
+                    <span class="meta-value">DreamWorks</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Хронометраж</span>
+                    <span class="meta-value">8 мин</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Жанр</span>
+                    <span class="meta-value">Анимация, Семейный</span>
+                </div>
+            </div>
+        </div>
+
+   <!-- Кнопка для просмотра видео -->
+<div class="video-button-wrapper">
+    <a href="https://yandex.ru/video/preview/10296015434926429234?utm_source=copy_link&utm_medium=social&utm_campaign=share" target="_blank" class="watch-btn">
+        <span class="play-icon">▶</span>
+        <span class="btn-text">Смотреть мультфильм</span>
+    </a>
+    <p class="video-hint">💡 Видео откроется в новой вкладке на Rutube</p>
+</div>
+    </iframe>
+</div>
+    </iframe>
+</div>
+    </div>
+</div>
+</div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>

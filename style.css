@@ -1,0 +1,1216 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --text-light: #fff;
+    --text-dark: #1a1a2e;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-light);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Динамический фон */
+.background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background: linear-gradient(135deg, #c14e2a, #e8935a);
+    transition: background 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Частицы */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    50% { transform: translateY(-100vh) translateX(50px); }
+}
+
+/* Навигация */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #fff;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    transition: opacity 0.3s;
+}
+
+.menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transition: width 0.3s;
+}
+
+.menu a:hover::after {
+    width: 100%;
+}
+
+.burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.burger span {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    transition: 0.3s;
+}
+
+/* Секции */
+section {
+    min-height: 100vh;
+    padding: 120px 50px 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 60px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #fff;
+    margin: 20px auto 0;
+    border-radius: 2px;
+}
+
+/* ГЛАВНАЯ */
+#home {
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    letter-spacing: 10px;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+    to { text-shadow: 0 10px 60px rgba(255,255,255,0.3); }
+}
+
+.tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    opacity: 0.95;
+}
+
+.description {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: #fff;
+    color: #c14e2a;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+.btn-secondary:hover {
+    background: #fff;
+    color: #c14e2a;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+}
+
+.arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* ИСТОРИЯ */
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.story-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px 30px;
+    position: relative;
+    transition: all 0.5s;
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.story-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.story-card:hover {
+    transform: translateY(-10px);
+    background: rgba(255,255,255,0.2);
+}
+
+.card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    opacity: 0.3;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.story-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}
+
+.story-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* ПЕРСОНАЖИ */
+.characters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.character-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: all 0.5s;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.character-card.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.character-card:hover {
+    transform: translateY(-10px) scale(1.02);
+}
+
+.character-visual {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* font-size удален, так как теперь там картинка */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden; /* Чтобы картинка не вылезала за круг */
+}
+
+/* Стили для картинок персонажей */
+.custom-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bilby-visual { background: linear-gradient(135deg, #4a90a4, #7fb3c7); }
+.chick-visual { background: linear-gradient(135deg, #f5f5f5, #d0d0d0); }
+.snake-visual { background: linear-gradient(135deg, #5a8f2a, #8bc34a); }
+.adult-visual { background: linear-gradient(135deg, #1e3a5f, #4a7fa5); }
+
+.character-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.species {
+    display: block;
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+
+.character-card > p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.traits span {
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+/* СМЫСЛ */
+.meaning-quote {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    border: 1px solid var(--glass-border);
+}
+
+.quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-style: italic;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.quote-author {
+    font-size: 1rem;
+    opacity: 0.8;
+    letter-spacing: 2px;
+}
+
+.meanings-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.meaning-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 35px 30px;
+    transition: all 0.5s;
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.meaning-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.meaning-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.2);
+}
+
+.meaning-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Стили для маленьких иконок смысла */
+.custom-icon-small {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+.meaning-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.meaning-item p {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* ГАЛЕРЕЯ */
+.gallery-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 30px;
+}
+.gallery-item {
+transition: all 0.5s;
+opacity: 0;
+transform: scale(0.9);
+}
+.gallery-item.visible {
+opacity: 1;
+transform: scale(1);
+}
+.gallery-placeholder {
+height: 280px;
+border-radius: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+transition: all 0.5s;
+cursor: pointer;
+}
+/* Стили для иконок галереи */
+.custom-icon-large {
+width: 140px;
+height: 140px;
+object-fit: contain;
+margin-bottom: 15px;
+filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+.gallery-placeholder p {
+font-family: 'Playfair Display', serif;
+font-size: 1.4rem;
+font-weight: 700;
+}
+.gallery-item:hover .gallery-placeholder {
+transform: scale(1.05);
+box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.gallery-caption {
+text-align: center;
+margin-top: 15px;
+font-size: 1rem;
+opacity: 0.9;
+font-style: italic;
+}
+
+/* Стили для иконок галереи */
+.custom-icon-large {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+
+.gallery-placeholder p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.gallery-item:hover .gallery-placeholder {
+    transform: scale(1.05);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+.gallery-caption {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+/* ФАКТЫ */
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.fact-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 35px 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.fact-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fact-card:hover {
+    transform: translateY(-10px);
+}
+
+.fact-number {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    font-weight: 900;
+    opacity: 0.1;
+}
+
+.fact-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.fact-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* СМОТРЕТЬ */
+#watch {
+    text-align: center;
+}
+
+.watch-info {
+    margin-bottom: 40px;
+}
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.meta-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.meta-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.video-wrapper {
+    max-width: 900px;
+    margin: 0 auto 30px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #000;
+}
+
+video {
+    width: 100%;
+    display: block;
+}
+
+.watch-note {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px 30px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: 1px solid var(--glass-border);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.watch-note code {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+/* ФУТЕР */
+footer {
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(20px);
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto 10px;
+}
+
+.footer-made {
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    nav {
+        padding: 15px 20px;
+    }
+    .menu {
+         display: none;
+         position: absolute;
+         top: 100%;
+         left: 0;
+         width: 100%;
+         background: rgba(0,0,0,0.9);
+         flex-direction: column;
+         padding: 20px;
+         gap: 15px;
+     }
+     .menu.active {
+         display: flex;
+     }
+     .burger {
+         display: flex;
+     }
+     section {
+         padding: 100px 20px 60px;
+     }
+     .hero-content h1 {
+         font-size: 4rem;
+         letter-spacing: 5px;
+     }
+     .section-title {
+         font-size: 2.2rem;
+     }
+     .quote-text {
+         font-size: 1.5rem;
+     }
+}
+/* Бегущая строка с автором */
+.author-banner {
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.author-banner-content {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a2e;
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+    animation: slideBanner 20s linear infinite;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+.author-label {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: 15px;
+}
+
+.author-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #c14e2a;
+}
+
+@keyframes slideBanner {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100vw);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .author-banner {
+        bottom: 30px;
+    }
+    
+    .author-banner-content {
+        padding: 12px 20px;
+    }
+    
+    .author-label {
+        font-size: 0.75rem;
+    }
+    
+    .author-name {
+        font-size: 1.1rem;
+    }
+}
+/* Фон первой секции — фото пустыни */
+#home {
+    background-image: url('6bbfe359190939.5a188e484a608.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Затемняющий overlay, чтобы текст читался */
+#home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(193, 78, 42, 0.45);
+    z-index: 0;
+}
+
+/* Поднимаем контент над overlay */
+#home .container {
+    position: relative;
+    z-index: 1;
+}
+/* Фон второй секции — фото дождя */
+#story {
+    background-image: url('6a44099f44ed1991522907.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#story::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#story .container {
+    position: relative;
+    z-index: 1;
+}
+/* Фон третьей секции — подводный мир */
+#characters {
+    background-image: url('2026-11-16_13-11.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#characters::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 40, 70, 0.55);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#characters .container {
+    position: relative;
+    z-index: 2;
+}
+/* Фон четвёртой секции — горный пейзаж */
+#meaning {
+    background-image: url('WMcIEU5yOLI.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#meaning::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 50, 40, 0.5);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#meaning .container {
+    position: relative;
+    z-index: 2;
+}
+/* Фон пятой секции — горный пейзаж */
+#gallery {
+    background-image: url('orig.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#gallery::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(100, 140, 160, 0.4);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#gallery .container {
+    position: relative;
+    z-index: 2;
+}
+/* Фон шестой секции — фото бильби */
+#facts {
+    background-image: url('997-1644451389-98221725.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#facts::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(30, 50, 60, 0.55);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#facts .container {
+    position: relative;
+    z-index: 2;
+}
+/* Фон седьмой секции — закат в горах */
+#watch {
+    background-image: url('orig.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+}
+
+/* Затемняющий overlay для читаемости текста */
+#watch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 20, 40, 0.6);
+    z-index: 0;
+}
+
+/* Поднимаем контент секции над overlay */
+#watch .container {
+    position: relative;
+    z-index: 2;
+}
+/* Бегающий птенец альбатроса */
+.running-chick {
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    z-index: 9999;
+    user-select: none;
+    pointer-events: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+    transition: transform 0.15s ease;
+    animation: chickRun 10s linear infinite;
+}
+
+.chick-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s;
+    /* Лёгкое покачивание — имитация бега */
+    animation: chickBounce 0.4s ease-in-out infinite;
+}
+
+/* Эффект при наведении */
+.running-chick:hover {
+    transform: scale(1.25);
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
+}
+
+.running-chick:hover .chick-image {
+    animation-play-state: paused;
+}
+
+/* Эффект при клике */
+.running-chick:active {
+    transform: scale(0.85);
+}
+
+/* Покачивание при беге */
+@keyframes chickBounce {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+/* Траектория движения по экрану */
+@keyframes chickRun {
+    0% {
+        left: -150px;
+        top: 60%;
+    }
+    15% {
+        left: 20%;
+        top: 30%;
+    }
+    30% {
+        left: 45%;
+        top: 70%;
+    }
+    50% {
+        left: 60%;
+        top: 25%;
+    }
+    70% {
+        left: 75%;
+        top: 65%;
+    }
+    85% {
+        left: 90%;
+        top: 40%;
+    }
+    100% {
+        left: calc(100% + 150px);
+        top: 55%;
+    }
+}
+
+/* Частицы салюта */
+.firework-particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    animation: fireworkExplode 1s ease-out forwards;
+}
+
+@keyframes fireworkExplode {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Кнопка "Смотреть видео" */
+.video-button-wrapper {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.watch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 25px 60px;
+    background: linear-gradient(135deg, #c14e2a, #e8935a);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 60px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 15px 40px rgba(193, 78, 42, 0.5);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Блик на кнопке */
+.watch-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+}
+
+.watch-btn:hover::before {
+    left: 100%;
+}
+
+.watch-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 50px rgba(193, 78, 42, 0.7);
+    background: linear-gradient(135deg, #e8935a, #c14e2a);
+}
+
+.watch-btn:active {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.play-icon {
+    font-size: 2rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.video-hint {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .watch-btn {
+        padding: 20px 40px;
+        font-size: 1.2rem;
+    }
+    
+    .play-icon {
+        font-size: 1.5rem;
+    }
+}
